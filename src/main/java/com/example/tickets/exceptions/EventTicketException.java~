@@ -1,0 +1,19 @@
+package com.example.tickets.exceptions;
+
+public class EventTicketException extends RuntimeException {
+    public EventTicketException() {
+        super();
+    }
+
+    public EventTicketException(String message) {
+        super(message);
+    }
+
+    public EventTicketException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public EventTicketException(Throwable cause) {
+        super(cause);
+    }
+}

@@ -1,0 +1,49 @@
+package com.example.tickets.controllers;
+
+import com.example.tickets.mappers.TicketMapper;
+import com.example.tickets.services.QrCodeService;
+import com.example.tickets.services.TicketTypeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(path = "/api/v1/ticket-types")
+public class TicketTypeController {
+    private final TicketTypeService ticketTypeService;
+    private final QrCodeService qrCodeService;
+
+    @PostMapping(path = "/{ticketTypeId}/purchase")
+    public ResponseEntity<Void> purchaseTicket(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID ticketTypeId
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        ticketTypeService.purchaseTicket(userId, ticketTypeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(path = "/{ticketId}/qr-codes")
+    public ResponseEntity<byte[]> getTicketQrCode(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID ticketId
+    ) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        byte[] qrCodeImage = qrCodeService.getQrCodeImageForUserAndTicket(userId, ticketId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(qrCodeImage.length);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(qrCodeImage);
+    }
+
+}
