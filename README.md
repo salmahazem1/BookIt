@@ -87,8 +87,8 @@ Before you begin, ensure you have the following installed:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/salmahazem1/event-ticket-platform.git
-cd event-ticket-platform
+git clone https://github.com/salmahazem1/BookIt.git
+cd BookIt
 ```
 
 ### Step 2: Start Infrastructure with Docker Compose
@@ -328,3 +328,4 @@ DRAFT → PUBLISHED → COMPLETED
 CANCELLED (from any state)
 ```
  
+
